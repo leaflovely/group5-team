@@ -82,7 +82,7 @@
 <script setup lang="ts">
 import {listApi} from '/@/api/index/notice'
 import {useUserStore} from "/@/store";
-import logoImage from '/@/assets/images/k-logo.png';
+import logoImage from '/@/assets/images/group5-logo.png';
 import SearchIcon from '/@/assets/images/search-icon.svg';
 import AvatarIcon from '/@/assets/images/avatar.jpg';
 import MessageIcon from '/@/assets/images/message-icon.svg';

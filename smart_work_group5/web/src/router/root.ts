@@ -137,7 +137,6 @@ const constantRouterMap = [
     redirect: '/admin/thing',
     component: () => import('/@/views/admin/main.vue'),
     children: [
-      { path: 'overview', name: 'overview', component: () => import('/@/views/admin/overview.vue') },
       { path: 'thing', name: 'thing', component: () => import('/@/views/admin/thing.vue') },
       { path: 'company', name: 'company', component: () => import('/@/views/admin/company.vue') },
       { path: 'resume', name: 'resume', component: () => import('/@/views/admin/resume.vue') },
@@ -145,11 +144,6 @@ const constantRouterMap = [
       { path: 'user', name: 'user', component: () => import('/@/views/admin/user.vue') },
       { path: 'classification', name: 'classification', component: () => import('/@/views/admin/classification.vue') },
       { path: 'tag', name: 'tag', component: () => import('/@/views/admin/tag.vue') },
-      { path: 'ad', name: 'ad', component: () => import('/@/views/admin/ad.vue') },
-      { path: 'notice', name: 'notice', component: () => import('/@/views/admin/notice.vue') },
-      { path: 'loginLog', name: 'loginLog', component: () => import('/@/views/admin/login-log.vue') },
-      { path: 'opLog', name: 'opLog', component: () => import('/@/views/admin/op-log.vue') },
-      { path: 'errorLog', name: 'errorLog', component: () => import('/@/views/admin/error-log.vue') },
       { path: 'sysInfo', name: 'sysInfo', component: () => import('/@/views/admin/sys-info.vue') },
     ]
   },

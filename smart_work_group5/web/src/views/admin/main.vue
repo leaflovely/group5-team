@@ -3,7 +3,7 @@
     <a-layout-header style="background: #fff; padding: 0">
       <div class="header">
         <img class="header-logo" :src="logo">
-        <span class="header-title">求职招聘管理系统</span>
+        <span class="header-title">智慧零工平台</span>
         <div class="empty"></div>
         <a-button style="margin-right: 24px;" @click="handlePreview">前台预览</a-button>
         <span>管理员[{{ userStore.admin_user_name }}]</span>
@@ -43,46 +43,6 @@
             <user-outlined/>
             <span>用户管理</span>
           </a-menu-item>
-          <a-sub-menu>
-            <template #icon>
-              <folder-outlined/>
-            </template>
-            <template #title>运营管理</template>
-            <a-menu-item key="ad">
-              <appstore-outlined/>
-              <span>广告管理</span>
-            </a-menu-item>
-            <a-menu-item key="notice">
-              <appstore-outlined/>
-              <span>通知公告</span>
-            </a-menu-item>
-          </a-sub-menu>
-          <a-sub-menu>
-            <template #icon>
-              <folder-outlined/>
-            </template>
-            <template #title>日志管理</template>
-            <a-menu-item key="loginLog">
-              <appstore-outlined/>
-              <span>登录日志</span>
-            </a-menu-item>
-            <a-menu-item key="opLog">
-              <appstore-outlined/>
-              <span>操作日志</span>
-            </a-menu-item>
-            <a-menu-item key="errorLog">
-              <appstore-outlined/>
-              <span>错误日志</span>
-            </a-menu-item>
-          </a-sub-menu>
-          <a-menu-item key="overview">
-            <home-outlined/>
-            <span>统计分析</span>
-          </a-menu-item>
-          <a-menu-item key="sysInfo">
-            <info-circle-outlined/>
-            <span>系统信息</span>
-          </a-menu-item>
         </a-menu>
       </a-layout-sider>
       <a-layout-content :style="{ margin: '16px 16px', minHeight: '200px' }">
@@ -94,7 +54,7 @@
 </template>
 <script setup lang="ts">
 import {useRouter, useRoute} from 'vue-router'
-import logo from '/@/assets/images/k-logo.png'
+import logo from '/@/assets/images/group5-logo.png'
 
 import {
   HomeOutlined,

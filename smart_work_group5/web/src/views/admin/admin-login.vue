@@ -2,7 +2,7 @@
   <div id="userLayout">
     <div class="user-layout-header">
       <img class="logo" :src="logoImage" alt="">
-      <span>求职招聘管理系统</span>
+      <span>智慧零工平台</span>
     </div>
     <div class="main-container">
       <div class="main">
@@ -63,7 +63,7 @@
 
 <script setup lang="ts">
 import {useUserStore} from '/@/store';
-import logoImage from '/@/assets/images/k-logo.png';
+import logoImage from '/@/assets/images/group5-logo.png';
 
 const router = useRouter();
 const userStore = useUserStore();
@@ -141,7 +141,7 @@ const loginSuccess = () => {
   .main-container {
     width: 100%;
     height: calc(100vh - 160px);
-    background-image: url('../images/admin-login-bg.jpg');
+    background-image: url('/@/assets/images/生成智慧零工平台背景图.png');
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;

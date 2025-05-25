@@ -103,7 +103,7 @@ div {
 .container {
   max-width: 100%;
   //background: #142131;
-  background-image: url('../images/admin-login-bg.jpg');
+  background-image: url('/@/assets/images/生成智慧零工平台背景图.png');
   background-size: cover;
   object-fit: cover;
   height: 100vh;

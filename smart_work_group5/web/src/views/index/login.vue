@@ -43,7 +43,7 @@
 <script setup lang="ts">
 import {useUserStore} from '/@/store';
 import {message} from "ant-design-vue";
-import LogoIcon from '/@/assets/images/k-logo.png';
+import LogoIcon from '/@/assets/images/group5-logo.png';
 import MailIcon from '/@/assets/images/mail-icon.svg';
 import PwdIcon from '/@/assets/images/pwd-icon.svg';
 
@@ -90,7 +90,7 @@ div {
 
 .container {
   //background-color: #f1f1f1;
-  background-image: url('../images/admin-login-bg.jpg');
+  background-image: url('/@/assets/images/零工平台login.png');
   background-size: cover;
   object-fit: cover;
   height: 100%;
