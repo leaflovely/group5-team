@@ -12,16 +12,10 @@
     </div>
     <div class="counts-view">
       <div class="counts flex-view">
-        <div class="fans-box flex-item" @click="clickMenu('collectThingView')">
-          <div class="text">收藏</div>
-          <div class="num">{{collectCount}}</div>
-        </div>
+
         <div class="split-line">
         </div>
-        <div class="follow-box flex-item" @click="clickMenu('wishThingView')">
-          <div class="text">心愿单</div>
-          <div class="num">{{wishCount}}</div>
-        </div>
+
 <!--        <div class="split-line">-->
 <!--        </div>-->
 <!--        <div class="points-box flex-item">-->

@@ -50,48 +50,7 @@
 
               </div>
             </div>
-            <div class="thing-counts hidden-sm">
-              <div class="count-item flex-view pointer" @click="addToWish()">
-                <div class="count-img">
-                  <img :src="WantIcon">
-                </div>
-                <div class="count-box flex-view">
-                  <div class="count-text-box">
-                    <span class="count-title">加入心愿单</span>
-                  </div>
-                  <div class="count-num-box">
-                    <span class="num-text">{{ detailData.wish_count }}</span>
-                  </div>
-                </div>
-              </div>
-              <div class="count-item flex-view pointer" @click="collect()">
-                <div class="count-img">
-                  <img :src="RecommendIcon">
-                </div>
-                <div class="count-box flex-view">
-                  <div class="count-text-box">
-                    <span class="count-title">收藏</span>
-                  </div>
-                  <div class="count-num-box">
-                    <span class="num-text">{{ detailData.collect_count }}</span>
-                  </div>
-                </div>
-              </div>
-              <div class="count-item flex-view" @click="share()">
-                <div class="count-img">
-                  <img :src="ShareIcon">
-                </div>
-                <div class="count-box flex-view">
-                  <div class="count-text-box">
-                    <span class="count-title">分享</span>
-                  </div>
-                  <div class="count-num-box">
-                    <span class="num-text"></span>
-                    <img :src="WeiboShareIcon" class="mg-l">
-                  </div>
-                </div>
-              </div>
-            </div>
+            
           </div>
         </div>
       </div>
