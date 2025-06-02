@@ -1,570 +1,477 @@
 <template>
-  <div class="content">
-    <div class="content-left">
-      <div class="left-search-item">
-        <h4>岗位分类</h4>
-        <a-tree :tree-data="contentData.cData" :selected-keys="contentData.selectedKeys" @select="onSelect"
-                style="min-height: 220px;">
-        </a-tree>
-      </div>
-      <div class="left-search-item"><h4>热门标签</h4>
-        <div class="tag-view tag-flex-view">
-            <span class="tag" :class="{'tag-select': contentData.selectTagId===item.id}"
-                  v-for="item in contentData.tagData" :key="item.id"
-                  @click="clickTag(item.id)">{{ item.title }}</span>
+  <div class="job-platform">
+    <!-- 上部由其他组件控制，这里从主要内容开始 -->
+    <div class="header-spacer"></div>
+    <div class="main-content">
+      <!-- 左侧筛选栏 -->
+      <div class="filter-sidebar">
+        <div class="filter-section">
+          <h3 class="filter-title">
+            <a-icon type="appstore" /> 岗位分类
+          </h3>
+          <a-tree
+            :tree-data="contentData.cData"
+            :selected-keys="contentData.selectedKeys"
+            @select="onSelect"
+            class="category-tree"
+          />
         </div>
-      </div>
-    </div>
-    <div class="content-right">
-      <div class="top-select-view flex-view">
-        <div class="order-view">
-          <span class="title"></span>
-          <span class="tab"
-                :class="contentData.selectTabIndex===index? 'tab-select':''"
-                v-for="(item,index) in contentData.tabData"
-                :key="index"
-                @click="selectTab(index)">
-            {{ item }}
-          </span>
-          <span :style="{left: contentData.tabUnderLeft + 'px'}" class="tab-underline"></span>
-        </div>
-      </div>
-      <a-spin :spinning="contentData.loading" style="min-height: 200px;">
-        <div class="pc-thing-list flex-view">
-          <div class="sub-li" v-for="item in contentData.pageData" @click="handleDetail(item)">
-            <a class="job-info" target="_blank">
-              <div class="sub-li-top">
-                <div class="sub-li-info">
-                  <p class="name">{{item.title}}</p>
-                </div>
-                <p class="salary">{{item.salary}}</p>
-              </div>
-              <p class="job-text">
-                <span>{{item.location}}</span>
-                <span>{{item.work_expe}}</span>
-                <span>{{item.education}}</span>
-              </p>
-            </a>
-          </div>
-          <div v-if="contentData.pageData.length <= 0 && !contentData.loading" class="no-data" style="">暂无数据</div>
-        </div>
-      </a-spin>
-      <div class="page-view" style="">
-        <a-pagination v-model="contentData.page" size="small" @change="changePage" :hideOnSinglePage="true"
-                      :defaultPageSize="contentData.pageSize" :total="contentData.total" :showSizeChanger="false"/>
-      </div>
-    </div>
 
-    <div style="position: fixed; bottom: 10px; right: 10px">
+        <div class="filter-section">
+          <h3 class="filter-title">
+            <a-icon type="tags" /> 热门标签
+          </h3>
+          <div class="tag-container">
+            <span
+              v-for="item in contentData.tagData"
+              :key="item.id"
+              class="tag"
+              :class="{ active: contentData.selectTagId === item.id }"
+              @click="clickTag(item.id)"
+            >
+              {{ item.title }}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 右侧职位内容 -->
+      <div class="job-content">
+        <div class="sort-options">
+          <div class="sort-tabs">
+            <span
+              v-for="(tab, index) in contentData.tabData"
+              :key="index"
+              class="sort-tab"
+              :class="{ active: contentData.selectTabIndex === index }"
+              @click="selectTab(index)"
+            >
+              {{ tab }}
+            </span>
+          </div>
+          <div class="results-count">
+            共 {{ contentData.total }} 个职位
+          </div>
+        </div>
+
+        <a-spin :spinning="contentData.loading">
+          <div class="job-list">
+            <div
+              v-for="item in contentData.pageData"
+              :key="item.id"
+              class="job-card"
+              @click="handleDetail(item)"
+            >
+              <div class="job-header">
+                <div class="job-info">
+                  <h3 class="job-title">{{ item.title }}</h3>
+                </div>
+                <div class="job-salary">{{ item.salary }}</div>
+              </div>
+
+              <div class="job-meta">
+                <div class="meta-item">
+                  <a-icon type="environment" />
+                  <span>{{ item.location }}</span>
+                </div>
+                <div class="meta-item">
+                  <a-icon type="solution" />
+                  <span>{{ item.work_expe }}</span>
+                </div>
+                <div class="meta-item">
+                  <a-icon type="read" />
+                  <span>{{ item.education }}</span>
+                </div>
+              </div>
+            </div>
+
+            <div
+              v-if="contentData.pageData.length <= 0 && !contentData.loading"
+              class="empty-state"
+            >
+              <a-icon type="inbox" class="empty-icon" />
+              <p>未找到匹配的职位</p>
+              <p class="empty-hint">请尝试调整筛选条件</p>
+            </div>
+          </div>
+        </a-spin>
+
+        <div class="pagination-container">
+          <a-pagination
+            v-model="contentData.page"
+            size="small"
+            @change="changePage"
+            :hideOnSinglePage="true"
+            :defaultPageSize="contentData.pageSize"
+            :total="contentData.total"
+            :showSizeChanger="false"
+          />
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
-<script setup>
-import {listApi as listClassificationList} from '/@/api/index/classification'
-import {listApi as listTagList} from '/@/api/index/tag'
-import {listApi as listThingList} from '/@/api/index/thing'
-import {BASE_URL} from "/@/store/constants";
-import {useUserStore} from "/@/store";
+<script>
+import { reactive, onMounted } from 'vue';
+import { useRouter } from 'vue-router';
+import { useUserStore } from '/@/store';
+import { listApi as listClassificationList } from '/@/api/index/classification';
+import { listApi as listTagList } from '/@/api/index/tag';
+import { listApi as listThingList } from '/@/api/index/thing';
+import { BASE_URL } from '/@/store/constants';
 
-const userStore = useUserStore()
-const router = useRouter();
+export default {
+  setup() {
+    const router = useRouter();
+    const userStore = useUserStore();
 
-const contentData = reactive({
-  selectX: 0,
-  selectTagId: -1,
-  cData: [],
-  selectedKeys: [],
-  tagData: [],
-  loading: false,
+    const contentData = reactive({
+      selectX: 0,
+      selectTagId: -1,
+      cData: [{ key: '-1', title: '全部' }],
+      selectedKeys: ['-1'],
+      tagData: [],
+      loading: false,
+      tabData: ['最新', '最热', '推荐'],
+      selectTabIndex: 0,
+      tabUnderLeft: 12,
+      thingData: [],
+      pageData: [],
+      page: 1,
+      total: 0,
+      pageSize: 15
+    });
 
-  tabData: ['最新', '最热', '推荐'],
-  selectTabIndex: 0,
-  tabUnderLeft: 12,
+    // 初始化数据
+    const initData = async () => {
+      try {
+        // 获取分类数据
+        const classificationRes = await listClassificationList();
+        classificationRes.data.forEach(item => {
+          item.key = item.id;
+          contentData.cData.push(item);
+        });
 
-  thingData: [],
-  pageData: [],
+        // 获取标签数据
+        const tagRes = await listTagList();
+        contentData.tagData = tagRes.data;
 
-  page: 1,
-  total: 0,
-  pageSize: 15,
-})
-
-onMounted(() => {
-  initSider()
-  getThingList({})
-})
-
-const initSider = () => {
-  contentData.cData.push({key:'-1', title:'全部'})
-  listClassificationList().then(res => {
-    res.data.forEach(item=>{
-      item.key = item.id
-      contentData.cData.push(item)
-    })
-  })
-  listTagList().then(res => {
-    contentData.tagData = res.data
-  })
-}
-
-const getSelectedKey = () => {
-  if (contentData.selectedKeys.length > 0) {
-    return contentData.selectedKeys[0]
-  } else {
-    return -1
-  }
-}
-const onSelect = (selectedKeys) => {
-  contentData.selectedKeys = selectedKeys
-  console.log(contentData.selectedKeys[0])
-  if (contentData.selectedKeys.length > 0) {
-    getThingList({c: getSelectedKey()})
-  }
-  contentData.selectTagId = -1
-}
-const clickTag = (index) => {
-  contentData.selectedKeys = []
-  contentData.selectTagId = index
-  getThingList({tag: contentData.selectTagId})
-}
-
-// 最新|最热|推荐
-const selectTab = (index) => {
-  contentData.selectTabIndex = index
-  contentData.tabUnderLeft = 12 + 50 * index
-  console.log(contentData.selectTabIndex)
-  let sort = (index === 0 ? 'recent' : index === 1 ? 'hot' : 'recommend')
-  const data = {sort: sort}
-  if (contentData.selectTagId !== -1) {
-    data['tag'] = contentData.selectTagId
-  } else {
-    data['c'] = getSelectedKey()
-  }
-  getThingList(data)
-}
-const handleDetail = (item) => {
-  // 跳转新页面
-  let text = router.resolve({name: 'detail', query: {id: item.id}})
-  window.open(text.href, '_blank')
-}
-// 分页事件
-const changePage = (page) => {
-  contentData.page = page
-  let start = (contentData.page - 1) * contentData.pageSize
-  contentData.pageData = contentData.thingData.slice(start, start + contentData.pageSize)
-  console.log('第' + contentData.page + '页')
-}
-const getThingList = (data) => {
-  contentData.loading = true
-  listThingList(data).then(res => {
-    contentData.loading = false
-    res.data.forEach((item, index) => {
-      if (item.cover) {
-        item.cover = BASE_URL +  item.cover
+        // 获取职位数据
+        await getThingList({});
+      } catch (error) {
+        console.error('初始化数据失败:', error);
       }
-    })
-    console.log(res)
-    contentData.thingData = res.data
-    contentData.total = contentData.thingData.length
-    changePage(1)
-  }).catch(err => {
-    console.log(err)
-    contentData.loading = false
-  })
-}
+    };
 
+    // 获取职位列表
+    const getThingList = async (data) => {
+      contentData.loading = true;
+      try {
+        const res = await listThingList(data);
+        res.data.forEach(item => {
+          if (item.cover) {
+            item.cover = BASE_URL + item.cover;
+          }
+        });
+        contentData.thingData = res.data;
+        contentData.total = contentData.thingData.length;
+        changePage(1);
+      } catch (err) {
+        console.error('获取职位列表失败:', err);
+      } finally {
+        contentData.loading = false;
+      }
+    };
 
+    const onSelect = (selectedKeys) => {
+      contentData.selectedKeys = selectedKeys;
+      contentData.selectTagId = -1;
+      const data = { c: getSelectedKey() };
+      if (contentData.selectTabIndex !== 0) {
+        data.sort = getSortValue();
+      }
+      getThingList(data);
+    };
+
+    const getSelectedKey = () => {
+      return contentData.selectedKeys.length > 0 ? contentData.selectedKeys[0] : -1;
+    };
+
+    const clickTag = (id) => {
+      contentData.selectedKeys = [];
+      contentData.selectTagId = id;
+      const data = { tag: contentData.selectTagId };
+      if (contentData.selectTabIndex !== 0) {
+        data.sort = getSortValue();
+      }
+      getThingList(data);
+    };
+
+    const selectTab = (index) => {
+      contentData.selectTabIndex = index;
+      contentData.tabUnderLeft = 12 + 50 * index;
+      const data = { sort: getSortValue() };
+      if (contentData.selectTagId !== -1) {
+        data.tag = contentData.selectTagId;
+      } else {
+        data.c = getSelectedKey();
+      }
+      getThingList(data);
+    };
+
+    const getSortValue = () => {
+      return contentData.selectTabIndex === 0 
+        ? 'recent' 
+        : contentData.selectTabIndex === 1 
+          ? 'hot' 
+          : 'recommend';
+    };
+
+    const handleDetail = (item) => {
+      const text = router.resolve({ name: 'detail', query: { id: item.id } });
+      window.open(text.href, '_blank');
+    };
+
+    const changePage = (page) => {
+      contentData.page = page;
+      const start = (contentData.page - 1) * contentData.pageSize;
+      contentData.pageData = contentData.thingData.slice(start, start + contentData.pageSize);
+    };
+
+    onMounted(() => {
+      initData();
+    });
+
+    return {
+      contentData,
+      onSelect,
+      clickTag,
+      selectTab,
+      handleDetail,
+      changePage
+    };
+  }
+};
 </script>
 
-<style scoped lang="less">
-.content {
+<style scoped>
+.job-platform {
+  max-width: 1200px;
+  margin: 20px auto;
+  padding: 0 15px;
+}
+.header-spacer {
+  height: 80px; /* 这个值可以根据您的header实际高度调整 */
+}
+.main-content {
   display: flex;
-  flex-direction: row;
-  width: 1100px;
-  margin: 80px auto;
+  gap: 24px;
 }
 
-.content-left {
-  width: 220px;
-  margin-right: 32px;
+.filter-sidebar {
+  width: 250px;
+  flex-shrink: 0;
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  height: fit-content;
 }
 
-.left-search-item {
-  overflow: hidden;
-  border-bottom: 1px solid #cedce4;
-  margin-top: 24px;
-  padding-bottom: 24px;
+.filter-section {
+  margin-bottom: 24px;
+  border-bottom: 1px solid #e9ecef;
+  padding-bottom: 20px;
 }
 
-h4 {
-  color: #4d4d4d;
-  font-weight: 600;
+.filter-section:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.filter-title {
   font-size: 16px;
-  line-height: 24px;
-  height: 24px;
-}
-
-.category-item {
-  cursor: pointer;
-  color: #333;
-  margin: 12px 0 0;
-  padding-left: 16px;
-}
-
-ul {
-  margin: 0;
-  padding: 0;
-}
-
-ul {
-  list-style-type: none;
-}
-
-li {
-  margin: 4px 0 0;
-  display: list-item;
-  text-align: -webkit-match-parent;
-}
-
-.child {
-  color: #333;
-  padding-left: 16px;
-}
-
-.child:hover {
-  color: #4684e2;
-}
-
-.select {
-  color: #4684e2;
-}
-
-.flex-view {
-  -webkit-box-pack: justify;
-  -ms-flex-pack: justify;
-  //justify-content: space-between;
+  font-weight: 600;
+  margin-bottom: 16px;
+  color: #212529;
   display: flex;
-}
-
-.name {
-  font-size: 14px;
-}
-
-.name:hover {
-  color: #4684e2;
-}
-
-.count {
-  font-size: 14px;
-  color: #999;
-}
-
-.check-item {
-  font-size: 0;
-  height: 18px;
-  line-height: 12px;
-  margin: 12px 0 0;
-  color: #333;
-  cursor: pointer;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
   align-items: center;
+  gap: 8px;
 }
 
-.check-item input {
-  cursor: pointer;
+.category-tree {
+  min-height: 200px;
 }
 
-.check-item label {
-  font-size: 14px;
-  margin-left: 12px;
-  cursor: pointer;
-  -webkit-box-flex: 1;
-  -ms-flex: 1;
-  flex: 1;
-}
-
-.tag-view {
-  -ms-flex-wrap: wrap;
-  flex-wrap: wrap;
-  margin-top: 4px;
-}
-
-.tag-flex-view {
-  display: -webkit-box;
-  display: -ms-flexbox;
+.tag-container {
   display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
 }
 
 .tag {
-  background: #fff;
-  border: 1px solid #a1adc6;
-  -webkit-box-sizing: border-box;
-  box-sizing: border-box;
+  background: #f8f9fa;
+  padding: 6px 12px;
   border-radius: 16px;
-  height: 20px;
-  line-height: 18px;
-  padding: 0 8px;
-  margin: 8px 8px 0 0;
+  font-size: 13px;
   cursor: pointer;
-  font-size: 12px;
-  color: #152833;
+  transition: all 0.2s ease;
 }
 
-.tag:hover {
-  background: #4684e3;
-  color: #fff;
-  border: 1px solid #4684e3;
+.tag:hover,
+.tag.active {
+  background: #4361ee;
+  color: white;
 }
 
-.tag-select {
-  background: #4684e3;
-  color: #fff;
-  border: 1px solid #4684e3;
-}
-
-.content-right {
-  -webkit-box-flex: 1;
-  -ms-flex: 1;
+.job-content {
   flex: 1;
-  padding-top: 12px;
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
 
-  .pc-search-view {
-    margin: 0 0 24px;
-    -webkit-box-align: center;
-    -ms-flex-align: center;
-    align-items: center;
+.sort-options {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #e9ecef;
+}
 
-    .search-icon {
-      width: 20px;
-      height: 20px;
-      -webkit-box-flex: 0;
-      -ms-flex: 0 0 20px;
-      flex: 0 0 20px;
-      margin-right: 16px;
-    }
+.sort-tabs {
+  display: flex;
+  gap: 12px;
+}
 
-    input {
-      outline: none;
-      border: 0px;
-      -webkit-box-flex: 1;
-      -ms-flex: 1;
-      flex: 1;
-      border-bottom: 1px solid #cedce4;
-      color: #152844;
-      font-size: 14px;
-      height: 22px;
-      line-height: 22px;
-      -ms-flex-item-align: end;
-      align-self: flex-end;
-      padding-bottom: 8px;
-    }
+.sort-tab {
+  padding: 6px 16px;
+  border-radius: 16px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-weight: 500;
+  font-size: 14px;
+  background: #f8f9fa;
+}
 
-    .clear-search-icon {
-      position: relative;
-      left: -20px;
-      cursor: pointer;
-    }
+.sort-tab.active {
+  background: #4361ee;
+  color: white;
+}
 
-    button {
-      outline: none;
-      border: none;
-      font-size: 14px;
-      color: #fff;
-      background: #288dda;
-      border-radius: 32px;
-      width: 88px;
-      height: 32px;
-      line-height: 32px;
-      margin-left: 2px;
-      cursor: pointer;
-    }
+.results-count {
+  color: #6c757d;
+  font-size: 14px;
+}
 
-    .float-count {
-      color: #999;
-      margin-left: 24px;
-    }
+.job-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.job-card {
+  background: white;
+  border-radius: 8px;
+  padding: 20px;
+  transition: all 0.2s ease;
+  border: 1px solid #e9ecef;
+  cursor: pointer;
+}
+
+.job-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+  border-color: #4361ee;
+}
+
+.job-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.job-info {
+  flex: 1;
+}
+
+.job-title {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 4px;
+  color: #212529;
+}
+
+.job-salary {
+  background: #2ec4b6;
+  color: white;
+  padding: 4px 12px;
+  border-radius: 16px;
+  font-weight: 600;
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+.job-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  font-size: 13px;
+  color: #495057;
+}
+
+.meta-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.empty-state {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 40px 0;
+  color: #6c757d;
+}
+
+.empty-icon {
+  font-size: 40px;
+  margin-bottom: 16px;
+  color: #adb5bd;
+}
+
+.empty-hint {
+  color: #adb5bd;
+  font-size: 13px;
+  margin-top: 4px;
+}
+
+.pagination-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 32px;
+  padding-top: 24px;
+  border-top: 1px solid #e9ecef;
+}
+
+@media (max-width: 992px) {
+  .main-content {
+    flex-direction: column;
   }
-
-  .flex-view {
-    display: flex;
-  }
-
-  .top-select-view {
-    -webkit-box-pack: justify;
-    -ms-flex-pack: justify;
-    justify-content: space-between;
-    -webkit-box-align: center;
-    -ms-flex-align: center;
-    align-items: center;
-    height: 40px;
-    line-height: 40px;
-
-    .type-view {
-      position: relative;
-      font-weight: 400;
-      font-size: 18px;
-      color: #5f77a6;
-
-      .type-tab {
-        margin-right: 32px;
-        cursor: pointer;
-      }
-
-      .type-tab-select {
-        color: #152844;
-        font-weight: 600;
-        font-size: 20px;
-      }
-
-      .tab-underline {
-        position: absolute;
-        bottom: 0;
-        //left: 22px;
-        width: 16px;
-        height: 4px;
-        background: #4684e2;
-        -webkit-transition: left .3s;
-        transition: left .3s;
-      }
-    }
-
-    .order-view {
-      position: relative;
-      color: #6c6c6c;
-      font-size: 14px;
-
-      .title {
-        margin-right: 8px;
-      }
-
-      .tab {
-        color: #999;
-        margin-right: 20px;
-        cursor: pointer;
-      }
-
-      .tab-select {
-        color: #152844;
-      }
-
-      .tab-underline {
-        position: absolute;
-        bottom: 0;
-        left: 84px;
-        width: 16px;
-        height: 4px;
-        background: #4684e2;
-        -webkit-transition: left .3s;
-        transition: left .3s;
-      }
-    }
-
-  }
-
-  .pc-thing-list {
-    margin-top: 24px;
-    -ms-flex-wrap: wrap;
-    flex-wrap: wrap;
-    gap: 24px;
-
-    .sub-li {
-      background-color: #f6fbfb;
-      height: 120px;
-      overflow: hidden;
-      transition: all .2s linear;
-      display: block;
-      width: 260px;
-      font-size: 0;
-      padding: 16px 20px;
-      box-sizing: border-box;
-      .job-info {
-        padding: 16px 20px;
-        box-sizing: border-box;
-      }
-      .sub-li-top {
-        margin-bottom: 12px;
-        display: flex;
-        width: 100%;
-        align-items: center;
-        .name {
-          color: #222;
-          font-size: 16px;
-          font-weight: 500;
-          line-height: 22px;
-          transition: all .2s linear;
-          position: relative;
-          max-width: 200px;
-          margin-right: 8px;
-          overflow: hidden;
-          text-overflow: ellipsis;
-          white-space: nowrap;
-        }
-        .salary {
-          font-size: 16px;
-          font-weight: 500;
-          color: #fe574a;
-          line-height: 22px;
-          flex: none;
-        }
-      }
-      .sub-li-info {
-        display: flex;
-        align-items: center;
-        flex-wrap: wrap;
-        height: 22px;
-        overflow: hidden;
-        flex: 1;
-      }
-      .job-text {
-        white-space: normal;
-        padding-right: 0;
-        height: 22px;
-        line-height: 22px;
-        overflow: hidden;
-        word-break: break-all;
-        max-width: none;
-        span {
-          display: inline-block;
-          height: 18px;
-          font-size: 13px;
-          font-weight: 400;
-          color: #666;
-          line-height: 18px;
-          padding-right: 20px;
-          border-radius: 4px;
-          background: #f8f8f8;
-        }
-      }
-    }
-
-
-    .no-data {
-      height: 200px;
-      line-height: 200px;
-      text-align: center;
-      width: 100%;
-      font-size: 16px;
-      color: #152844;
-    }
-  }
-
-  .page-view {
+  
+  .filter-sidebar {
     width: 100%;
-    text-align: center;
-    margin-top: 48px;
   }
 }
 
-.a-price-symbol {
-  top: -0.5em;
-  font-size: 12px;
+@media (max-width: 768px) {
+  .job-list {
+    grid-template-columns: 1fr;
+  }
 }
-
-.a-price {
-  color: #0F1111;
-  font-size: 21px;
-}
-
 </style>
