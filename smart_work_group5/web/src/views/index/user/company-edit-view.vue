@@ -167,6 +167,7 @@ input, textarea {
   outline: none;
   margin: 0;
   padding: 0;
+  transition: all 0.3s ease;
 }
 
 .flex-view {
@@ -179,29 +180,90 @@ input, textarea {
   -webkit-box-flex: 1;
   -ms-flex: 1;
   flex: 1;
+  background: #fff;
+  border-radius: 20px;
+  box-shadow: 0 6px 18px rgba(24, 144, 255, 0.12);
+  padding: 32px 36px;
+  position: relative;
+  overflow: hidden;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: -120px;
+    right: -80px;
+    width: 300px;
+    height: 300px;
+    background: rgba(24, 144, 255, 0.03);
+    border-radius: 50%;
+    z-index: 0;
+  }
+  
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: -80px;
+    left: -60px;
+    width: 220px;
+    height: 220px;
+    background: rgba(24, 144, 255, 0.035);
+    border-radius: 50%;
+    z-index: 0;
+  }
 
   .list-title {
-    color: #152844;
+    color: #1890ff;
     font-weight: 600;
-    font-size: 18px;
+    font-size: 24px;
     line-height: 48px;
     height: 48px;
-    margin-bottom: 4px;
-    border-bottom: 1px solid #cedce4;
+    margin-bottom: 24px;
+    border-bottom: 1px solid rgba(24, 144, 255, 0.15);
+    position: relative;
+    z-index: 1;
+    
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: -1px;
+      left: 0;
+      width: 80px;
+      height: 3px;
+      background: linear-gradient(90deg, #1890ff, #40a9ff);
+      border-radius: 2px;
+    }
   }
 
   .edit-view {
+    position: relative;
+    z-index: 1;
+    
     .item {
       -webkit-box-align: center;
       -ms-flex-align: center;
       align-items: center;
-      margin: 24px 0;
+      margin: 32px 0;
+      position: relative;
 
       .label {
-        width: 100px;
-        color: #152844;
-        font-weight: 600;
-        font-size: 14px;
+        width: 110px;
+        color: #444;
+        font-weight: 500;
+        font-size: 15px;
+        position: relative;
+        padding-left: 16px;
+        
+        &::before {
+          content: '';
+          position: absolute;
+          left: 0;
+          top: 50%;
+          transform: translateY(-50%);
+          width: 4px;
+          height: 16px;
+          background: #40a9ff;
+          border-radius: 2px;
+        }
       }
 
       .right-box {
@@ -210,11 +272,24 @@ input, textarea {
         flex: 1;
       }
 
+      .avatar-box {
+        align-items: center;
+      }
+
       .avatar {
-        width: 64px;
-        height: 64px;
-        border-radius: 50%;
-        margin-right: 16px;
+        width: 90px;
+        height: 90px;
+        border-radius: 20px;
+        margin-right: 24px;
+        object-fit: cover;
+        border: 3px solid rgba(24, 144, 255, 0.2);
+        box-shadow: 0 8px 16px rgba(24, 144, 255, 0.15);
+        transition: all 0.3s ease;
+        
+        &:hover {
+          transform: translateY(-5px) rotate(3deg);
+          box-shadow: 0 12px 20px rgba(24, 144, 255, 0.25);
+        }
       }
 
       .change-tips {
@@ -226,81 +301,178 @@ input, textarea {
       }
 
       label {
-        color: #4684e2;
-        font-size: 14px;
+        color: #1890ff;
+        font-size: 15px;
         line-height: 22px;
         height: 22px;
         cursor: pointer;
-        width: 100px;
+        width: 130px;
         display: block;
+        font-weight: 500;
+        
+        &:hover {
+          color: #40a9ff;
+          text-decoration: underline;
+        }
       }
 
       .tip {
-        color: #6f6f6f;
-        font-size: 14px;
+        color: #888;
+        font-size: 13px;
         height: 22px;
         line-height: 22px;
         margin: 0;
         width: 100%;
       }
 
-      .right-box {
-        -webkit-box-flex: 1;
-        -ms-flex: 1;
-        flex: 1;
-      }
-
       .input-dom {
-        width: 400px;
-      }
-
-      .input-dom {
-        background: #f8fafb;
-        border-radius: 4px;
-        height: 40px;
-        line-height: 40px;
-        font-size: 14px;
-        color: #152844;
-        padding: 0 12px;
+        width: 430px;
+        background: #f0f7ff;
+        border: 1px solid rgba(24, 144, 255, 0.15);
+        border-radius: 12px;
+        height: 50px;
+        line-height: 50px;
+        font-size: 15px;
+        color: #333;
+        padding: 0 20px;
+        transition: all 0.3s ease;
+        
+        &:hover {
+          border-color: rgba(24, 144, 255, 0.4);
+        }
+        
+        &:focus {
+          border-color: #1890ff;
+          background-color: #fff;
+          box-shadow: 0 0 0 3px rgba(24, 144, 255, 0.15);
+        }
       }
 
       .tip {
         font-size: 12px;
         line-height: 16px;
-        color: #6f6f6f;
+        color: #888;
         height: 16px;
-        margin-top: 4px;
+        margin-top: 8px;
       }
 
       .intro {
         resize: none;
-        background: #f8fafb;
+        background: #f0f7ff;
         width: 100%;
-        padding: 8px 12px;
-        height: 82px;
-        line-height: 22px;
-        font-size: 14px;
-        color: #152844;
+        padding: 16px 20px;
+        height: 100px;
+        line-height: 24px;
+        font-size: 15px;
+        color: #333;
+        border: 1px solid rgba(24, 144, 255, 0.15);
+        border-radius: 12px;
+        transition: all 0.3s ease;
+        
+        &:hover {
+          border-color: rgba(24, 144, 255, 0.4);
+        }
+        
+        &:focus {
+          border-color: #1890ff;
+          background: #fff;
+          box-shadow: 0 0 0 3px rgba(24, 144, 255, 0.15);
+        }
       }
     }
 
     .save {
-      background: #4684e2;
-      border-radius: 32px;
-      width: 96px;
-      height: 32px;
-      line-height: 32px;
-      font-size: 14px;
+      background: linear-gradient(135deg, #1890ff 0%, #40a9ff 100%);
+      border-radius: 28px;
+      width: 140px;
+      height: 48px;
+      line-height: 48px;
+      font-size: 16px;
+      font-weight: 500;
       color: #fff;
       border: none;
       outline: none;
       cursor: pointer;
+      box-shadow: 0 8px 15px rgba(24, 144, 255, 0.25);
+      transition: all 0.3s ease;
+      
+      &:hover {
+        background: linear-gradient(135deg, #40a9ff 0%, #096dd9 100%);
+        box-shadow: 0 10px 20px rgba(24, 144, 255, 0.35);
+        transform: translateY(-3px);
+      }
+      
+      &:active {
+        transform: translateY(0);
+        box-shadow: 0 5px 10px rgba(24, 144, 255, 0.2);
+      }
     }
 
     .mg {
-      margin-left: 100px;
+      margin-left: 110px;
+      margin-top: 24px;
     }
   }
 }
 
+// 美化上传按钮
+:deep(.ant-upload) {
+  .ant-btn {
+    height: 40px;
+    border-radius: 10px;
+    border: 1px solid rgba(24, 144, 255, 0.3);
+    background: #f0f7ff;
+    color: #1890ff;
+    transition: all 0.3s;
+    
+    &:hover {
+      background: #e6f7ff;
+      color: #40a9ff;
+      border-color: rgba(24, 144, 255, 0.5);
+    }
+  }
+}
+
+// 增加响应式适配
+@media screen and (max-width: 768px) {
+  .content-list {
+    padding: 20px;
+    
+    .edit-view {
+      .item {
+        flex-direction: column;
+        align-items: flex-start;
+        
+        .label {
+          margin-bottom: 8px;
+          padding-left: 0;
+          width: auto;
+          
+          &::before {
+            display: none;
+          }
+        }
+        
+        .avatar-box {
+          flex-direction: column;
+          align-items: center;
+          
+          .avatar {
+            margin-right: 0;
+            margin-bottom: 16px;
+          }
+        }
+        
+        .input-dom {
+          width: 100%;
+        }
+      }
+      
+      .mg {
+        margin-left: 0;
+        width: 100%;
+      }
+    }
+  }
+}
 </style>
