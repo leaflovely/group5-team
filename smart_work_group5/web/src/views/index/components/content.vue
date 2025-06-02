@@ -1,31 +1,40 @@
 <template>
   <div class="job-platform">
-    <!-- 上部由其他组件控制，这里从主要内容开始 -->
+    <!-- 顶部搜索框 -->
+    <div class="search-bar-wrapper">
+      <a-input-search
+        v-model:value="contentData.searchText"
+        placeholder="输入职位关键词"
+        enter-button
+        size="large"
+        class="modern-search-bar"
+        @search="onSearch"
+      />
+    </div>
     <div class="header-spacer"></div>
     <div class="main-content">
       <!-- 左侧筛选栏 -->
-      <div class="filter-sidebar">
+      <div class="filter-sidebar modern-filter-sidebar">
         <div class="filter-section">
-          <h3 class="filter-title">
+          <h3 class="filter-title modern-filter-title">
             <a-icon type="appstore" /> 岗位分类
           </h3>
           <a-tree
             :tree-data="contentData.cData"
             :selected-keys="contentData.selectedKeys"
             @select="onSelect"
-            class="category-tree"
+            class="category-tree modern-category-tree"
           />
         </div>
-
         <div class="filter-section">
-          <h3 class="filter-title">
+          <h3 class="filter-title modern-filter-title">
             <a-icon type="tags" /> 热门标签
           </h3>
-          <div class="tag-container">
+          <div class="tag-container modern-tag-container">
             <span
               v-for="item in contentData.tagData"
               :key="item.id"
-              class="tag"
+              class="tag modern-tag"
               :class="{ active: contentData.selectTagId === item.id }"
               @click="clickTag(item.id)"
             >
@@ -34,9 +43,8 @@
           </div>
         </div>
       </div>
-
       <!-- 右侧职位内容 -->
-      <div class="job-content">
+      <div class="job-content modern-job-content">
         <div class="sort-options">
           <div class="sort-tabs">
             <span
@@ -56,35 +64,24 @@
 
         <a-spin :spinning="contentData.loading">
           <div class="job-list">
-            <div
+            <a-card
               v-for="item in contentData.pageData"
               :key="item.id"
-              class="job-card"
-              @click="handleDetail(item)"
+              class="job-modern-card"
+              hoverable
+              @click.native="handleDetail(item)"
+              :body-style="{padding: '20px 24px'}"
             >
-              <div class="job-header">
-                <div class="job-info">
-                  <h3 class="job-title">{{ item.title }}</h3>
-                </div>
+              <div class="job-card-header">
+                <div class="job-title">{{ item.title }}</div>
                 <div class="job-salary">{{ item.salary }}</div>
               </div>
-
-              <div class="job-meta">
-                <div class="meta-item">
-                  <a-icon type="environment" />
-                  <span>{{ item.location }}</span>
-                </div>
-                <div class="meta-item">
-                  <a-icon type="solution" />
-                  <span>{{ item.work_expe }}</span>
-                </div>
-                <div class="meta-item">
-                  <a-icon type="read" />
-                  <span>{{ item.education }}</span>
-                </div>
+              <div class="job-card-meta">
+                <span class="meta-item"><a-icon type="environment" /> {{ item.location }}</span>
+                <span class="meta-item"><a-icon type="solution" /> {{ item.work_expe }}</span>
+                <span class="meta-item"><a-icon type="read" /> {{ item.education }}</span>
               </div>
-            </div>
-
+            </a-card>
             <div
               v-if="contentData.pageData.length <= 0 && !contentData.loading"
               class="empty-state"
@@ -140,7 +137,8 @@ export default {
       pageData: [],
       page: 1,
       total: 0,
-      pageSize: 15
+      pageSize: 15,
+      searchText: '',
     });
 
     // 初始化数据
@@ -239,6 +237,18 @@ export default {
       contentData.pageData = contentData.thingData.slice(start, start + contentData.pageSize);
     };
 
+    const onSearch = () => {
+      // 简单本地搜索（如需后端搜索可改为请求接口）
+      if (!contentData.searchText) {
+        changePage(1);
+        return;
+      }
+      const keyword = contentData.searchText.trim().toLowerCase();
+      contentData.pageData = contentData.thingData.filter(item =>
+        item.title.toLowerCase().includes(keyword)
+      );
+    };
+
     onMounted(() => {
       initData();
     });
@@ -249,13 +259,14 @@ export default {
       clickTag,
       selectTab,
       handleDetail,
-      changePage
+      changePage,
+      onSearch
     };
   }
 };
 </script>
 
-<style scoped>
+<style scoped lang="less">
 .job-platform {
   max-width: 1200px;
   margin: 20px auto;
@@ -267,6 +278,18 @@ export default {
 .main-content {
   display: flex;
   gap: 24px;
+}
+
+.search-bar-wrapper {
+  max-width: 1200px;
+  margin: 0 auto 24px auto;
+  padding-top: 24px;
+}
+.modern-search-bar {
+  border-radius: 24px !important;
+  box-shadow: 0 2px 12px rgba(24, 144, 255, 0.10);
+  font-size: 16px;
+  padding: 8px 20px;
 }
 
 .filter-sidebar {
@@ -374,62 +397,48 @@ export default {
   gap: 20px;
 }
 
-.job-card {
-  background: white;
-  border-radius: 8px;
-  padding: 20px;
-  transition: all 0.2s ease;
-  border: 1px solid #e9ecef;
+.job-modern-card {
+  border-radius: 18px;
+  box-shadow: 0 2px 16px rgba(24, 144, 255, 0.10);
+  margin-bottom: 18px;
+  transition: box-shadow 0.3s, transform 0.3s;
   cursor: pointer;
-}
-
-.job-card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
-  border-color: #4361ee;
-}
-
-.job-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 12px;
-  margin-bottom: 12px;
-}
-
-.job-info {
-  flex: 1;
-}
-
-.job-title {
-  font-size: 16px;
-  font-weight: 600;
-  margin-bottom: 4px;
-  color: #212529;
-}
-
-.job-salary {
-  background: #2ec4b6;
-  color: white;
-  padding: 4px 12px;
-  border-radius: 16px;
-  font-weight: 600;
-  font-size: 14px;
-  white-space: nowrap;
-}
-
-.job-meta {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-  font-size: 13px;
-  color: #495057;
-}
-
-.meta-item {
-  display: flex;
-  align-items: center;
-  gap: 4px;
+  &:hover {
+    box-shadow: 0 8px 32px rgba(24, 144, 255, 0.18);
+    transform: translateY(-4px) scale(1.02);
+  }
+  .job-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    .job-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #222;
+    }
+    .job-salary {
+      color: #13c2c2;
+      font-size: 16px;
+      font-weight: 600;
+      background: #e6fffb;
+      border-radius: 12px;
+      padding: 4px 16px;
+      min-width: 90px;
+      text-align: right;
+    }
+  }
+  .job-card-meta {
+    display: flex;
+    gap: 24px;
+    color: #888;
+    font-size: 14px;
+    .meta-item {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+  }
 }
 
 .empty-state {
@@ -473,5 +482,54 @@ export default {
   .job-list {
     grid-template-columns: 1fr;
   }
+}
+
+.modern-filter-sidebar {
+  border-radius: 20px;
+  box-shadow: 0 8px 32px rgba(24, 144, 255, 0.10);
+  background: #fafdff;
+  padding: 32px 24px;
+  margin-top: 8px;
+}
+.modern-filter-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: #1890ff;
+  margin-bottom: 18px;
+  letter-spacing: 1px;
+}
+.modern-category-tree {
+  background: #fff;
+  border-radius: 12px;
+  padding: 12px 8px;
+  box-shadow: 0 2px 8px rgba(24, 144, 255, 0.04);
+}
+.modern-tag-container {
+  gap: 12px;
+}
+.modern-tag {
+  background: #e6f7ff;
+  color: #1890ff;
+  border-radius: 16px;
+  font-size: 14px;
+  padding: 7px 18px;
+  font-weight: 500;
+  transition: all 0.2s;
+  border: 1px solid #e6f7ff;
+}
+.modern-tag.active,
+.modern-tag:hover {
+  background: #1890ff;
+  color: #fff;
+  border: 1px solid #1890ff;
+  box-shadow: 0 2px 8px rgba(24, 144, 255, 0.10);
+}
+
+.modern-job-content {
+  background: #fff;
+  border-radius: 20px;
+  box-shadow: 0 8px 32px rgba(24, 144, 255, 0.10);
+  padding: 32px 32px 24px 32px;
+  margin-top: 8px;
 }
 </style>

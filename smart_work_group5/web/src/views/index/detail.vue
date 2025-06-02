@@ -1,11 +1,11 @@
 <template>
-  <div class="detail">
+  <div class="detail modern-detail-bg">
     <Header/>
 
-    <div class="detail-content">
+    <div class="detail-content modern-detail-content">
       <div class="detail-content-top">
         <div style="position: relative;">
-          <div class="thing-infos-view">
+          <div class="thing-infos-view modern-card">
             <div class="thing-infos">
               <!--              <div class="thing-img-box">-->
               <!--                <img :src="CompanyIcon"/>-->
@@ -16,7 +16,7 @@
                   <span>正常</span>
                 </div>
                 <h1 class="thing-name">{{ detailData.title }}</h1>
-                <span>
+                <span class="modern-salary">
                   <span class="a-price-symbol"></span>
                   <span class="a-price">{{ detailData.salary }}</span>
                 </span>
@@ -42,7 +42,7 @@
                 </div>
 
                 <a-popconfirm title="确定投递?" ok-text="是" cancel-text="否" @confirm="handleOrder(detailData)">
-                  <button class="buy-btn">
+                  <button class="buy-btn modern-btn">
                     <img :src="AddIcon"/>
                     <span>投递简历</span>
                   </button>
@@ -54,98 +54,95 @@
           </div>
         </div>
       </div>
-      <div class="detail-content-bottom">
-        <div class="thing-content-view flex-view">
-          <div class="main-content">
-            <div class="order-view main-tab">
-          <span class="tab"
-                :class="selectTabIndex===index? 'tab-select':''"
-                v-for="(item,index) in tabData"
-                :key="index"
-                @click="selectTab(index)">
-            {{ item }}
-          </span>
-            </div>
-
-            <!--简介-->
-            <div class="thing-intro" :class="selectTabIndex <= 0? '':'hide'">
-              <p class="text" style="">{{ detailData.description }}</p>
-            </div>
-
-            <!--评论-->
-            <div class="thing-comment" :class="selectTabIndex > 0? '':'hide'">
-              <div class="title">发表新的评论</div>
-              <div class="publish flex-view">
-                <img :src="AvatarIcon" class="mine-img">
-                <input placeholder="说点什么..." class="content-input" ref="commentRef">
-                <button class="send-btn" @click="sendComment()">发送</button>
-              </div>
-              <div class="tab-view flex-view">
-                <div class="count-text">共有{{ commentData.length }}条评论</div>
-                <div class="tab-box flex-view" v-if="commentData.length > 0">
-                  <span :class="sortIndex === 0? 'tab-select': ''" @click="sortCommentList('recent')">最新</span>
-                  <div class="line"></div>
-                  <span :class="sortIndex === 1? 'tab-select': ''" @click="sortCommentList('hot')">热门</span>
-                </div>
-              </div>
-              <div class="comments-list">
-                <div class="comment-item" v-for="item in commentData">
-                  <div class="flex-item flex-view">
-                    <img :src="AvatarIcon" class="avator">
-                    <div class="person">
-                      <div class="name">{{ item.username }}</div>
-                      <div class="time">{{ item.comment_time }}</div>
-                    </div>
-                    <div class="float-right">
-                      <span @click="like(item.id)">推荐</span>
-                      <span class="num">{{ item.like_count }}</span>
-                    </div>
-                  </div>
-                  <p class="comment-content">{{ item.content }}</p>
-                </div>
-                <div class="infinite-loading-container">
-                  <div class="infinite-status-prompt" style="">
-                    <div slot="no-results" class="no-results">
-                      <div></div>
-                      <p>没有更多了</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
+      <div class="detail-content-bottom flex-view">
+        <div class="main-content modern-card">
+          <div class="order-view main-tab">
+            <span class="tab"
+                  :class="selectTabIndex===index? 'tab-select modern-tab-select':''"
+                  v-for="(item,index) in tabData"
+                  :key="index"
+                  @click="selectTab(index)">
+              {{ item }}
+            </span>
           </div>
-          <div class="recommend" style="">
-            <div class="title">热门推荐</div>
-            <div class="things">
-              <!--              <div class="thing-item thing-item" v-for="item in recommendData" @click="handleDetail(item)">-->
-              <!--                <div class="img-view">-->
-              <!--                  <img :src="item.cover"></div>-->
-              <!--                <div class="info-view">-->
-              <!--                  <h3 class="thing-name">{{ item.title.substring(0, 12)}}</h3>-->
-              <!--                  <span>-->
-              <!--                    <span class="a-price-symbol">¥</span>-->
-              <!--                    <span class="a-price">{{item.price}}</span>-->
-              <!--                  </span>-->
-              <!--                </div>-->
-              <!--              </div>-->
-              <div class="sub-li" v-for="item in recommendData" @click="handleDetail(item)">
-                <a class="job-info" target="_blank">
-                  <div class="sub-li-top">
-                    <div class="sub-li-info">
-                      <p class="name">{{ item.title }}</p>
-                    </div>
-                    <p class="salary">{{ item.salary }}</p>
-                  </div>
-                  <p class="job-text">
-                    <span>{{ item.location }}</span>
-                    <span>{{ item.work_expe }}</span>
-                    <span>{{ item.education }}</span>
-                  </p>
-                </a>
-              </div>
 
+          <!--简介-->
+          <div class="thing-intro" :class="selectTabIndex === 0 ? '' : 'hide'">
+            <p class="text" style="">{{ detailData.description }}</p>
+          </div>
+
+          <!--评论-->
+          <div class="thing-comment" :class="selectTabIndex === 1 ? '' : 'hide'">
+            <div class="title">发表新的评论</div>
+            <div class="publish flex-view">
+              <img :src="AvatarIcon" class="mine-img">
+              <input placeholder="说点什么..." class="content-input modern-input" ref="commentRef">
+              <button class="send-btn modern-btn" @click="sendComment()">发送</button>
             </div>
+            <div class="tab-view flex-view">
+              <div class="count-text">共有{{ commentData.length }}条评论</div>
+              <div class="tab-box flex-view" v-if="commentData.length > 0">
+                <span :class="sortIndex === 0? 'tab-select modern-tab-select': ''" @click="sortCommentList('recent')">最新</span>
+                <div class="line"></div>
+                <span :class="sortIndex === 1? 'tab-select modern-tab-select': ''" @click="sortCommentList('hot')">热门</span>
+              </div>
+            </div>
+            <div class="comments-list">
+              <div class="comment-item modern-comment-card" v-for="item in commentData">
+                <div class="flex-item flex-view">
+                  <img :src="AvatarIcon" class="avator">
+                  <div class="person">
+                    <div class="name">{{ item.username }}</div>
+                    <div class="time">{{ item.comment_time }}</div>
+                  </div>
+                  <div class="float-right">
+                    <span @click="like(item.id)" class="modern-btn-link">推荐</span>
+                    <span class="num">{{ item.like_count }}</span>
+                  </div>
+                </div>
+                <p class="comment-content">{{ item.content }}</p>
+              </div>
+              <div class="infinite-loading-container">
+                <div class="infinite-status-prompt" style="">
+                  <div slot="no-results" class="no-results">
+                    <div></div>
+                    <p>没有更多了</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="recommend modern-card">
+          <div class="title">热门推荐</div>
+          <div class="things">
+            <!--              <div class="thing-item thing-item" v-for="item in recommendData" @click="handleDetail(item)">-->
+            <!--                <div class="img-view">-->
+            <!--                  <img :src="item.cover"></div>-->
+            <!--                <div class="info-view">-->
+            <!--                  <h3 class="thing-name">{{ item.title.substring(0, 12)}}</h3>-->
+            <!--                  <span>-->
+            <!--                    <span class="a-price-symbol">¥</span>-->
+            <!--                    <span class="a-price">{{item.price}}</span>-->
+            <!--                  </span>-->
+            <!--                </div>-->
+            <!--              </div>-->
+            <div class="sub-li modern-recommend-card" v-for="item in recommendData" @click="handleDetail(item)">
+              <a class="job-info" target="_blank">
+                <div class="sub-li-top">
+                  <div class="sub-li-info">
+                    <p class="name">{{ item.title }}</p>
+                  </div>
+                  <p class="salary">{{ item.salary }}</p>
+                </div>
+                <p class="job-text">
+                  <span>{{ item.location }}</span>
+                  <span>{{ item.work_expe }}</span>
+                  <span>{{ item.education }}</span>
+                </p>
+              </a>
+            </div>
+
           </div>
         </div>
       </div>
@@ -191,7 +188,7 @@ const userStore = useUserStore();
 let thingId = ref('')
 let detailData = ref({})
 let tabUnderLeft = ref(6)
-let tabData = ref(['面试评价'])
+let tabData = ref(['简介', '面试评价'])
 let selectTabIndex = ref(1)
 
 let commentData = ref([])
@@ -350,6 +347,106 @@ const sortCommentList = (sortType) => {
 
 </script>
 <style scoped lang="less">
+body, .modern-detail-bg, .modern-detail-content, .modern-card, .main-content, .recommend, .thing-intro, .thing-comment, .modern-comment-card, .modern-recommend-card {
+  font-family: 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', Arial, sans-serif;
+  color: #222;
+  font-size: 16px;
+  letter-spacing: 0.02em;
+}
+
+.modern-card, .modern-comment-card, .modern-recommend-card {
+  font-size: 16px;
+}
+
+.thing-name {
+  font-size: 28px;
+  font-weight: 700;
+  color: #222;
+  margin-bottom: 8px;
+}
+
+.translators, .thing-info-box span, .thing-info-box .name {
+  font-size: 15px;
+  color: #555;
+}
+
+.modern-salary {
+  font-size: 22px;
+  font-weight: 700;
+  color: #ff4d4f;
+}
+
+.modern-btn, .send-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 48px;
+  min-width: 160px;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1;
+  padding: 0 32px;
+  box-sizing: border-box;
+  white-space: nowrap;
+  gap: 10px;
+  color: #fff !important;
+  text-align: center;
+  vertical-align: middle;
+  position: relative;
+}
+
+.modern-btn span, .send-btn span {
+  color: #fff !important;
+  display: inline-block;
+  text-align: center;
+  vertical-align: middle;
+  position: relative;
+  top: -2px;
+}
+
+.modern-btn img, .send-btn img {
+  margin-right: 6px;
+  vertical-align: middle;
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  position: relative;
+  top: -2px;
+}
+
+.order-view .tab, .order-view .tab-select, .modern-tab-select {
+  font-size: 16px;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+}
+
+.thing-comment .title {
+  font-size: 17px;
+  font-weight: 600;
+  color: #222;
+}
+
+.comment-content {
+  font-size: 15px;
+  color: #444;
+}
+
+.recommend .title {
+  font-size: 18px;
+  font-weight: 700;
+  color: #222;
+}
+
+.modern-recommend-card .name {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.modern-recommend-card .salary {
+  font-size: 16px;
+  font-weight: 600;
+  color: #ff4d4f;
+}
 
 .hide {
   display: none;
@@ -372,200 +469,90 @@ const sortCommentList = (sortType) => {
   display: none !important;
 }
 
-.thing-infos-view {
-  display: flex;
-  margin: 89px 0 40px;
-  overflow: hidden;
-
-  .thing-infos {
-    -webkit-box-flex: 1;
-    -ms-flex: 1;
-    flex: 1;
-    display: flex;
+.modern-detail-bg {
+  background: #f6f8fa;
+  min-height: 100vh;
+}
+.modern-detail-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 32px 0 0 0;
+}
+.modern-card {
+  background: #fff;
+  border-radius: 20px;
+  box-shadow: 0 4px 24px rgba(24, 144, 255, 0.10);
+  padding: 32px 36px 28px 36px;
+  margin-bottom: 32px;
+}
+.modern-btn {
+  background: #1890ff;
+  color: #fff;
+  border: none;
+  border-radius: 18px;
+  padding: 8px 28px;
+  font-size: 16px;
+  font-weight: 600;
+  box-shadow: 0 2px 8px rgba(24, 144, 255, 0.10);
+  transition: all 0.2s;
+  cursor: pointer;
+  &:hover {
+    background: #40a9ff;
+    box-shadow: 0 4px 16px rgba(24, 144, 255, 0.18);
+    color: #fff;
   }
-
-  .mobile-share-box {
-    height: 38px;
-    background: transparent;
-    padding: 0 16px;
-    margin: 12px 0;
-    font-size: 0;
-    -webkit-box-align: center;
-    -ms-flex-align: center;
-    align-items: center;
-    -webkit-box-pack: justify;
-    -ms-flex-pack: justify;
-    justify-content: space-between;
-
-    .state {
-      width: 64px;
-      height: 24px;
-      line-height: 24px;
-      background: rgba(70, 132, 226, .1);
-      border-radius: 2px;
-      font-weight: 500;
-      font-size: 12px;
-      color: #4684e2;
-      text-align: center;
-    }
-
-    .share-img {
-      background: #fff;
-      width: 38px;
-      height: 38px;
-      border-radius: 50%;
-      text-align: center;
-
-      img {
-        position: relative;
-        top: 4px;
-        width: 24px;
-      }
-    }
+}
+.modern-btn-link {
+  color: #1890ff;
+  cursor: pointer;
+  font-weight: 500;
+  border-radius: 8px;
+  padding: 2px 10px;
+  transition: background 0.2s;
+  &:hover {
+    background: #e6f7ff;
+    color: #40a9ff;
   }
-
-  .thing-img-box {
-    margin: 0 40px 0 0;
-
-    img {
-      width: 100px;
-      height: 100px;
-      display: block;
-    }
+}
+.modern-input {
+  border-radius: 16px;
+  border: 1px solid #e6f7ff;
+  padding: 8px 16px;
+  font-size: 15px;
+  margin: 0 12px;
+  background: #fafdff;
+  transition: border 0.2s;
+  &:focus {
+    border: 1.5px solid #1890ff;
+    background: #fff;
   }
-
-  .thing-info-box {
-    text-align: left;
-    padding: 0;
-    margin: 0;
-  }
-
-  .thing-state {
-    height: 26px;
-    line-height: 26px;
-
-    .state {
-      font-weight: 500;
-      color: #4684e2;
-      background: rgba(70, 132, 226, .1);
-      border-radius: 2px;
-      padding: 5px 8px;
-      margin-right: 16px;
-    }
-
-    span {
-      font-size: 14px;
-      color: #152844;
-    }
-  }
-
-  .thing-name {
-    line-height: 32px;
-    margin: 16px 0;
-    color: #0F1111 !important;
-    font-weight: 400 !important;
-    font-style: normal !important;
-    text-transform: none !important;
-    text-decoration: none !important;
-  }
-
-  .translators, .authors {
-    line-height: 18px;
-    font-size: 14px;
-    margin: 8px 0;
-    -webkit-box-align: start;
-    -ms-flex-align: start;
-    align-items: flex-start;
-    -webkit-box-pack: start;
-    -ms-flex-pack: start;
-    justify-content: flex-start;
-
-    .name {
-      color: #315c9e;
-      white-space: normal;
-    }
-  }
-
-  .tags {
-    position: absolute;
-    bottom: 20px;
-    margin-top: 16px;
-
-    .category-box {
-      color: #152844;
-      font-size: 14px;
-
-      .title {
-        color: #787878;
-      }
-    }
-  }
-
-  .thing-counts {
-    -webkit-box-flex: 0;
-    -ms-flex: 0 0 235px;
-    flex: 0 0 235px;
-    margin-left: 20px;
-  }
-
-  .pointer {
-    cursor: pointer;
-  }
-
-  .count-item {
-    height: 64px;
-    -webkit-box-align: center;
-    -ms-flex-align: center;
-    align-items: center;
-    cursor: pointer;
-  }
-
-  .count-img {
-    -webkit-box-flex: 0;
-    -ms-flex: 0 0 32px;
-    flex: 0 0 32px;
-    margin-right: 24px;
-    font-size: 0;
-
-    img {
-      width: 100%;
-      display: block;
-    }
-  }
-
-  .count-box {
-    position: relative;
-    border-bottom: 1px solid #cedce4;
-    -webkit-box-align: center;
-    -ms-flex-align: center;
-    align-items: center;
-    -webkit-box-pack: justify;
-    -ms-flex-pack: justify;
-    justify-content: space-between;
-    -webkit-box-flex: 1;
-    -ms-flex: 1;
-    flex: 1;
-    height: 100%;
-  }
-
-  .count-text-box {
-    font-size: 0;
-
-    .count-title {
-      color: #152844;
-      font-weight: 600;
-      font-size: 16px;
-      line-height: 18px;
-      display: block;
-      height: 18px;
-    }
-  }
-
-  .count-num-box {
-    font-weight: 600;
-    font-size: 20px;
-    line-height: 24px;
-    color: #152844;
+}
+.modern-comment-card {
+  background: #fafdff;
+  border-radius: 14px;
+  box-shadow: 0 2px 8px rgba(24, 144, 255, 0.06);
+  padding: 16px 18px 10px 18px;
+  margin-bottom: 18px;
+}
+.modern-tab-select {
+  background: #1890ff !important;
+  color: #fff !important;
+  border-radius: 16px;
+  padding: 4px 18px;
+  font-weight: 600;
+  transition: all 0.2s;
+}
+.modern-recommend-card {
+  background: #fafdff;
+  border-radius: 14px;
+  box-shadow: 0 2px 8px rgba(24, 144, 255, 0.06);
+  padding: 14px 18px 10px 18px;
+  margin-bottom: 16px;
+  cursor: pointer;
+  transition: box-shadow 0.2s, transform 0.2s;
+  &:hover {
+    box-shadow: 0 6px 18px rgba(24, 144, 255, 0.13);
+    transform: translateY(-2px) scale(1.01);
   }
 }
 

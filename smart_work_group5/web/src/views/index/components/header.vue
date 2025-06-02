@@ -3,10 +3,6 @@
     <div class="logo">
       <img :src="logoImage" class="search-icon" @click="$router.push({name:'portal'})">
     </div>
-    <div class="search-entry">
-      <img :src="SearchIcon" class="search-icon">
-      <input placeholder="输入关键词" ref="keywordRef" @keyup.enter="search" />
-    </div>
     <div class="right-view">
       <a style="font-size:16px;line-height: 32px;" @click="handleZhaoren">我要招人</a>
       <template v-if="userStore.user_token">
