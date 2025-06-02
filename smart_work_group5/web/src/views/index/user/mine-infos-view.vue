@@ -12,107 +12,79 @@
         </div>
       </div>
     </div>
-    <div class="counts-view">
-      <div class="counts flex-view">
-        <div class="fans-box flex-item" @click="clickMenu('collectThingView')">
-          <div class="text">收藏</div>
-          <div class="num">{{collectCount}}</div>
+    <div class="data-stats">
+      <div class="stat-item" @click="clickMenu('collectThingView')">
+        <div class="stat-icon collect-icon">
+          <i class="stat-icon-inner"></i>
         </div>
-        <div class="split-line">
-        </div>
-        <div class="follow-box flex-item" @click="clickMenu('wishThingView')">
-          <div class="text">心愿单</div>
-          <div class="num">{{wishCount}}</div>
-        </div>
-<!--        <div class="split-line">-->
-<!--        </div>-->
-<!--        <div class="points-box flex-item">-->
-<!--          <div class="text">积分</div>-->
-<!--          <div class="num">0</div>-->
-<!--        </div>-->
-      </div>
-      
-      <div class="data-stats">
-        <div class="stat-item" @click="clickMenu('collectThingView')">
-          <div class="stat-icon collect-icon">
-            <i class="stat-icon-inner"></i>
-          </div>
-          <div class="stat-content">
-            <div class="stat-value">{{collectCount}}</div>
-            <div class="stat-label">收藏</div>
-          </div>
-        </div>
-        
-        <div class="stat-item" @click="clickMenu('wishThingView')">
-          <div class="stat-icon wish-icon">
-            <i class="stat-icon-inner"></i>
-          </div>
-          <div class="stat-content">
-            <div class="stat-value">{{wishCount}}</div>
-            <div class="stat-label">心愿单</div>
-          </div>
+        <div class="stat-content">
+          <div class="stat-value">{{collectCount}}</div>
+          <div class="stat-label">收藏</div>
         </div>
       </div>
-      
-      <div class="section-divider">
-        <span>求职中心</span>
-      </div>
-      
-      <div class="menu-section">
-        <div class="mine-item flex-view" @click="clickMenu('myPostView')">
-          <div class="menu-icon"><img :src="SettingIconImage" alt="编辑资料"></div>
-          <span>我的投递</span>
+      <div class="stat-item" @click="clickMenu('wishThingView')">
+        <div class="stat-icon wish-icon">
+          <i class="stat-icon-inner"></i>
         </div>
-        <div class="mine-item flex-view" @click="clickMenu('resumeEditView')">
-          <div class="menu-icon"><img :src="SettingIconImage" alt="编辑资料"></div>
-          <span>我的简历</span>
-        </div>
-        <div class="mine-item flex-view" @click="clickMenu('commentView')">
-          <div class="menu-icon"><img :src="SettingIconImage"></div>
-          <span>我的评论</span>
+        <div class="stat-content">
+          <div class="stat-value">{{wishCount}}</div>
+          <div class="stat-label">心愿单</div>
         </div>
       </div>
-      
-      <div class="section-divider">
-        <span>招聘中心</span>
+    </div>
+    <div class="section-divider">
+      <span>求职中心</span>
+    </div>
+    <div class="menu-section">
+      <div class="mine-item flex-view" @click="clickMenu('myPostView')">
+        <div class="menu-icon"><img :src="SettingIconImage" alt="编辑资料"></div>
+        <span>我的投递</span>
       </div>
-      
-      <div class="menu-section">
-        <div class="mine-item flex-view" @click="clickMenu('companyPostView')">
-          <div class="menu-icon"><img :src="CommentIconImg"></div>
-          <span>投递管理</span>
-        </div>
-        <div class="mine-item flex-view" @click="clickMenu('myThingView')">
-          <div class="menu-icon"><img :src="CommentIconImg"></div>
-          <span>岗位管理</span>
-        </div>
-        <div class="mine-item flex-view" @click="clickMenu('myCompanyView')">
-          <div class="menu-icon"><img :src="CommentIconImg"></div>
-          <span>公司资料</span>
-        </div>
+      <div class="mine-item flex-view" @click="clickMenu('resumeEditView')">
+        <div class="menu-icon"><img :src="SettingIconImage" alt="编辑资料"></div>
+        <span>我的简历</span>
       </div>
-      
-      <div class="section-divider">
-        <span>系统设置</span>
+      <div class="mine-item flex-view" @click="clickMenu('commentView')">
+        <div class="menu-icon"><img :src="SettingIconImage"></div>
+        <span>我的评论</span>
       </div>
-      
-      <div class="menu-section">
-        <div class="mine-item flex-view" @click="clickMenu('userInfoEditView')">
-          <div class="menu-icon"><img :src="SettingIconImage" alt="编辑资料"></div>
-          <span>编辑资料</span>
-        </div>
-        <div class="mine-item flex-view" @click="clickMenu('securityView')">
-          <div class="menu-icon"><img :src="SafeIconImage" alt="账号安全"></div>
-          <span>账号安全</span>
-        </div>
-        <div class="mine-item flex-view" @click="clickMenu('pushView')">
-          <div class="menu-icon"><img :src="PushIconImage" alt="推送设置"></div>
-          <span>推送设置</span>
-        </div>
-        <div class="mine-item flex-view" @click="clickMenu('messageView')">
-          <div class="menu-icon"><img :src="MessageIconImage" alt="消息管理"></div>
-          <span>消息管理</span>
-        </div>
+    </div>
+    <div class="section-divider">
+      <span>招聘中心</span>
+    </div>
+    <div class="menu-section">
+      <div class="mine-item flex-view" @click="clickMenu('companyPostView')">
+        <div class="menu-icon"><img :src="CommentIconImg"></div>
+        <span>投递管理</span>
+      </div>
+      <div class="mine-item flex-view" @click="clickMenu('myThingView')">
+        <div class="menu-icon"><img :src="CommentIconImg"></div>
+        <span>岗位管理</span>
+      </div>
+      <div class="mine-item flex-view" @click="clickMenu('myCompanyView')">
+        <div class="menu-icon"><img :src="CommentIconImg"></div>
+        <span>公司资料</span>
+      </div>
+    </div>
+    <div class="section-divider">
+      <span>系统设置</span>
+    </div>
+    <div class="menu-section">
+      <div class="mine-item flex-view" @click="clickMenu('userInfoEditView')">
+        <div class="menu-icon"><img :src="SettingIconImage" alt="编辑资料"></div>
+        <span>编辑资料</span>
+      </div>
+      <div class="mine-item flex-view" @click="clickMenu('securityView')">
+        <div class="menu-icon"><img :src="SafeIconImage" alt="账号安全"></div>
+        <span>账号安全</span>
+      </div>
+      <div class="mine-item flex-view" @click="clickMenu('pushView')">
+        <div class="menu-icon"><img :src="PushIconImage" alt="推送设置"></div>
+        <span>推送设置</span>
+      </div>
+      <div class="mine-item flex-view" @click="clickMenu('messageView')">
+        <div class="menu-icon"><img :src="MessageIconImage" alt="消息管理"></div>
+        <span>消息管理</span>
       </div>
     </div>
   </div>
